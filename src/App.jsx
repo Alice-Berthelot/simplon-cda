@@ -1,20 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import carambar from "./assets/carambar.jpg";
 import "./App.css";
 
 function App() {
-  const randomJokes = [
-    "Pourquoi les plongeurs plongent-ils toujours en arrière ? Parce que sinon ils tombent dans le bateau.",
-    "Quel est le comble pour un électricien ? De ne pas être au courant.",
-    "Pourquoi le livre de maths est-il triste ? Parce qu’il a trop de problèmes.",
-  ];
+  const [jokes, setJokes] = useState([]);
 
-  const [index, setIndex] = useState(null);
+  useEffect(() => {
+    fetch("http://localhost:3310/api/jokes")
+      .then((response) => response.json())
+      .then((data) => setJokes(data))
+      .catch((error) => console.log("Error fetching data:", error));
+  }, []);
+
+  const [randomJoke, setRandomJoke] = useState(null);
 
   const handleClick = () => {
-    setIndex((initialIndex) =>
-      initialIndex === null ? 0 : (initialIndex + 1) % randomJokes.length
-    );
+    const randomIndex = Math.floor(Math.random() * jokes.length);
+    setRandomJoke(jokes[randomIndex]);
   };
 
   return (
@@ -22,7 +24,13 @@ function App() {
       <img src={carambar} alt="wrapped carambar" />
       <h1>Welcome to the Carambar website!</h1>
       <button onClick={handleClick}>Random joke</button>
-      {index !== null && <p>{randomJokes[index]}</p>}
+      {randomJoke !== null && (
+        <>
+          <h2>{randomJoke.question}</h2>
+          <p>{randomJoke.answer}</p>
+          <p>{randomJoke.id}</p>
+        </>
+      )}
     </section>
   );
 }
