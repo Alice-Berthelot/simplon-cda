@@ -1,4 +1,5 @@
 import { useState } from "react";
+import carambar from "./assets/carambar.jpg";
 import "./App.css";
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
 
   return (
     <section>
-      <img src="/carambar.jpg" alt="wrapped carambar" />
+      <img src={carambar} alt="wrapped carambar" />
       <h1>Welcome to the Carambar website!</h1>
       <button onClick={handleClick}>Random joke</button>
       {index !== null && <p>{randomJokes[index]}</p>}
